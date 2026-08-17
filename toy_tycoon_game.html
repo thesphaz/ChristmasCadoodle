@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎄 Christmas Toy Tycoon 🎄</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1e3f 0%, #2d3561 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 1200px;
+            background: #0a0f2c;
+            border-radius: 15px;
+            box-shadow: 0 0 40px rgba(0, 255, 150, 0.3);
+            padding: 20px;
+        }
+
+        .game-title {
+            text-align: center;
+            color: #00ff96;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 255, 150, 0.5);
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            background: rgba(50, 50, 100, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #00ff96;
+        }
+
+        .stat {
+            text-align: center;
+            color: #fff;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            color: #00ff96;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(to bottom, #1a2a4a 0%, #2d3d5f 100%);
+            border: 3px solid #00ff96;
+            border-radius: 10px;
+            display: block;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 15px;
+            background: linear-gradient(135deg, #3280ff 0%, #1e5fbf 100%);
+            color: white;
+            border: 2px solid #00ff96;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #4a9fff 0%, #2e7fff 100%);
+            box-shadow: 0 0 20px rgba(0, 255, 150, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .cost {
+            font-size: 0.8em;
+            color: #00ff96;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .order-display {
+            background: rgba(50, 50, 100, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #ff6b6b;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .order-title {
+            font-size: 1.2em;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #222;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #00ff96;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff96 0%, #00cc7a 100%);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .info {
+            background: rgba(50, 100, 50, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #00ff96;
+            color: #ddd;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .game-over {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            border: 3px solid #ff6b6b;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+            min-width: 300px;
+        }
+
+        .game-over.show {
+            display: block;
+        }
+
+        .game-over h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        .game-over p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .game-over button {
+            padding: 12px 30px;
+            background: #00ff96;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .game-over button:hover {
+            background: #00cc7a;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">🎄 Christmas Toy Tycoon 🎄</h1>
+        
+        <div class="game-stats">
+            <div class="stat">
+                <div class="stat-value" id="moneyDisplay">$100</div>
+                <div class="stat-label">💰 Money</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="scoreDisplay">0</div>
+                <div class="stat-label">📊 Score</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="levelDisplay">1</div>
+                <div class="stat-label">📈 Level</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="workersDisplay">1</div>
+                <div class="stat-label">👷 Workers</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="speedDisplay">1.0x</div>
+                <div class="stat-label">⚡ Speed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="daysDisplay">25</div>
+                <div class="stat-label">🎅 Days Left</div>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+
+        <div class="order-display">
+            <div class="order-title" id="orderTitle">Order: Wooden Blocks</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="orderProgress" style="width: 0%;">0 / 10</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="button" id="hireBtn" onclick="game.hireWorker()">
+                👷 Hire Worker
+                <span class="cost">$50</span>
+            </button>
+            <button class="button" id="speedBtn" onclick="game.speedUp()">
+                ⚡ Speed Up
+                <span class="cost">$30</span>
+            </button>
+            <button class="button" id="toyBtn" onclick="game.changeToyType()">
+                🎁 New Toy Type
+                <span class="cost">$100</span>
+            </button>
+            <button class="button" id="upgradeBtn" onclick="game.upgradeFactory()">
+                🏭 Upgrade Factory
+                <span class="cost">$200</span>
+            </button>
+        </div>
+
+        <div class="info">
+            <strong>💡 How to Play:</strong><br>
+            • Watch toys move along the conveyor belt from left to right<br>
+            • Hire workers to help produce toys faster<br>
+            • Complete orders to earn bonuses and level up<br>
+            • Upgrade your factory before Christmas arrives!<br>
+            • Each toy type has different value and production time
+        </div>
+    </div>
+
+    <div class="game-over" id="gameOverScreen">
+        <h2 id="gameOverTitle">Game Over!</h2>
+        <p id="gameOverMessage"></p>
+        <p id="finalScore"></p>
+        <button onclick="location.reload()">Play Again</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Resize canvas to fit container
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const ToyTypes = {
+            WOODEN_BLOCK: {
+                name: "Wooden Block",
+                value: 5,
+                productionTime: 30,
+                color: "#b48c50"
+            },
+            DOLL: {
+                name: "Doll",
+                value: 15,
+                productionTime: 60,
+                color: "#ffb4c8"
+            },
+            TRAIN: {
+                name: "Train",
+                value: 25,
+                productionTime: 90,
+                color: "#ff6432"
+            },
+            ROBOT: {
+                name: "Robot",
+                value: 40,
+                productionTime: 120,
+                color: "#c8c8c8"
+            }
+        };
+
+        class Toy {
+            constructor(type, x) {
+                this.type = type;
+                this.x = x;
+                this.y = canvas.height / 2;
+                this.progress = 0;
+                this.value = type.value;
+                this.size = 12;
+            }
+
+            update(speed) {
+                this.x += speed;
+                this.progress = Math.min(1, this.progress + 0.005);
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = this.type.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (this.progress < 1) {
+                    const barWidth = 30;
+                    const barHeight = 4;
+                    ctx.fillStyle = "#333";
+                    ctx.fillRect(this.x - barWidth / 2, this.y - 28, barWidth, barHeight);
+                    ctx.fillStyle = "#00ff96";
+                    ctx.fillRect(this.x - barWidth / 2, this.y - 28, barWidth * this.progress, barHeight);
+                }
+            }
+
+            isComplete() {
+                return this.progress >= 1;
+            }
+        }
+
+        class Worker {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.width = 18;
+                this.height = 28;
+                this.workingOn = null;
+            }
+
+            update(toys) {
+                if (!this.workingOn || this.workingOn.progress >= 1) {
+                    const incompleteToys = toys.filter(t => !t.isComplete());
+                    if (incompleteToys.length > 0) {
+                        this.workingOn = incompleteToys.reduce((a, b) =>
+                            Math.abs(a.x - this.x) < Math.abs(b.x - this.x) ? a : b
+                        );
+                    }
+                }
+
+                if (this.workingOn) {
+                    const targetX = this.workingOn.x;
+                    if (Math.abs(this.x - targetX) > 5) {
+                        this.x += (targetX - this.x) * 0.05;
+                    } else {
+                        this.workingOn.progress += 0.01;
+                    }
+                }
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = "#64c844";
+                ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+                ctx.fillStyle = "#ddb48c";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y - 20, 8, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const game = {
+            money: 100,
+            score: 0,
+            level: 1,
+            daysUntilChristmas: 25,
+            toys: [],
+            workers: [],
+            conveyorSpeed: 1.0,
+            currentOrder: ToyTypes.WOODEN_BLOCK,
+            ordersFulfilled: 0,
+            orderQuantity: 10,
+            orderProgress: 0,
+            gameRunning: true,
+
+            init() {
+                this.hireWorker();
+                this.gameLoop();
+                this.updateUI();
+            },
+
+            hireWorker() {
+                if (this.money < 50) return;
+                this.money -= 50;
+                const y = canvas.height / 2 + (Math.random() - 0.5) * 80;
+                this.workers.push(new Worker(Math.random() * 200 + 100, y));
+                this.updateUI();
+            },
+
+            speedUp() {
+                if (this.money < 30) return;
+                this.money -= 30;
+                this.conveyorSpeed *= 1.2;
+                this.updateUI();
+            },
+
+            changeToyType() {
+                if (this.money < 100) return;
+                this.money -= 100;
+                const types = Object.values(ToyTypes);
+                this.currentOrder = types[Math.floor(Math.random() * types.length)];
+                this.orderProgress = 0;
+                this.updateUI();
+            },
+
+            upgradeFactory() {
+                if (this.money < 200) return;
+                this.money -= 200;
+                this.level += 1;
+                this.conveyorSpeed += 0.8;
+                this.updateUI();
+            },
+
+            update() {
+                if (!this.gameRunning) return;
+
+                // Spawn new toys
+                if (Math.random() < 0.02 && this.toys.length < 30) {
+                    this.toys.push(new Toy(this.currentOrder, -20));
+                }
+
+                // Update toys
+                this.toys = this.toys.filter(toy => toy.x <= canvas.width + 50);
+                this.toys.forEach(toy => toy.update(this.conveyorSpeed));
+
+                // Check completed toys
+                this.toys.forEach(toy => {
+                    if (toy.isComplete() && toy.x < canvas.width - 50) {
+                        this.money += toy.value;
+                        this.score += toy.value;
+                        this.orderProgress += 1;
+                    }
+                });
+
+                this.toys = this.toys.filter(toy => !(toy.isComplete() && toy.x < canvas.width - 50));
+
+                // Update workers
+                this.workers.forEach(worker => worker.update(this.toys));
+
+                // Check order completion
+                if (this.orderProgress >= this.orderQuantity) {
+                    this.ordersFulfilled += 1;
+                    this.money += 50;
+                    const types = Object.values(ToyTypes);
+                    this.currentOrder = types[Math.floor(Math.random() * types.length)];
+                    this.orderProgress = 0;
+                    this.orderQuantity = Math.max(10, 10 + this.ordersFulfilled);
+                }
+
+                this.daysUntilChristmas = Math.max(0, 25 - Math.floor(this.ordersFulfilled / 5));
+
+                if (this.daysUntilChristmas === 0 && this.orderProgress < this.orderQuantity) {
+                    this.endGame(false);
+                }
+
+                this.updateUI();
+            },
+
+            draw() {
+                ctx.fillStyle = "rgba(26, 42, 74, 0.8)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw conveyor belt
+                ctx.fillStyle = "#646478";
+                ctx.fillRect(0, canvas.height / 2 - 30, canvas.width, 60);
+
+                ctx.strokeStyle = "#464650";
+                ctx.lineWidth = 1;
+                for (let i = 0; i < canvas.width; i += 40) {
+                    ctx.beginPath();
+                    ctx.moveTo(i, canvas.height / 2 - 30);
+                    ctx.lineTo(i, canvas.height / 2 + 30);
+                    ctx.stroke();
+                }
+
+                // Draw toys
+                this.toys.forEach(toy => toy.draw(ctx));
+
+                // Draw workers
+                this.workers.forEach(worker => worker.draw(ctx));
+            },
+
+            updateUI() {
+                document.getElementById('moneyDisplay').textContent = `$${this.money}`;
+                document.getElementById('scoreDisplay').textContent = this.score;
+                document.getElementById('levelDisplay').textContent = this.level;
+                document.getElementById('workersDisplay').textContent = this.workers.length;
+                document.getElementById('speedDisplay').textContent = this.conveyorSpeed.toFixed(1) + 'x';
+                document.getElementById('daysDisplay').textContent = this.daysUntilChristmas;
+
+                document.getElementById('orderTitle').textContent = 
+                    `Order: ${this.orderQuantity - this.orderProgress} ${this.currentOrder.name}s left`;
+                
+                const percentage = (this.orderProgress / this.orderQuantity) * 100;
+                const progressBar = document.getElementById('orderProgress');
+                progressBar.style.width = percentage + '%';
+                progressBar.textContent = `${this.orderProgress} / ${this.orderQuantity}`;
+
+                // Update button states
+                document.getElementById('hireBtn').disabled = this.money < 50;
+                document.getElementById('speedBtn').disabled = this.money < 30;
+                document.getElementById('toyBtn').disabled = this.money < 100;
+                document.getElementById('upgradeBtn').disabled = this.money < 200;
+            },
+
+            endGame(win) {
+                this.gameRunning = false;
+                const gameOverScreen = document.getElementById('gameOverScreen');
+                const title = document.getElementById('gameOverTitle');
+                const message = document.getElementById('gameOverMessage');
+                const finalScore = document.getElementById('finalScore');
+
+                if (win) {
+                    title.textContent = '🎉 You Won! 🎉';
+                    message.textContent = 'Congratulations! You delivered all toys before Christmas!';
+                } else {
+                    title.textContent = '❌ Christmas Passed ❌';
+                    message.textContent = 'Oh no! You ran out of time before Christmas arrived!';
+                }
+                finalScore.textContent = `Final Score: ${this.score} | Level: ${this.level}`;
+                gameOverScreen.classList.add('show');
+            },
+
+            gameLoop() {
+                this.update();
+                this.draw();
+                if (this.gameRunning) {
+                    requestAnimationFrame(() => this.gameLoop());
+                }
+            }
+        };
+
+        game.init();
+    </script>
+</body>
+</html>
