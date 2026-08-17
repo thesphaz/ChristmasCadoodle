@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎄 Christmas Toy Tycoon 🎄</title>
+    <title>🎄 Christmas Toy Tycoon - Roblox Edition 🎄</title>
     <style>
         * {
             margin: 0;
@@ -40,8 +40,8 @@
 
         .game-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
             margin-bottom: 20px;
             background: rgba(50, 50, 100, 0.5);
             padding: 15px;
@@ -55,21 +55,21 @@
         }
 
         .stat-value {
-            font-size: 1.8em;
+            font-size: 1.5em;
             color: #00ff96;
             font-weight: bold;
         }
 
         .stat-label {
-            font-size: 0.9em;
+            font-size: 0.8em;
             color: #aaa;
-            margin-top: 5px;
+            margin-top: 3px;
         }
 
         #gameCanvas {
             width: 100%;
-            height: 400px;
-            background: linear-gradient(to bottom, #1a2a4a 0%, #2d3d5f 100%);
+            height: 500px;
+            background: linear-gradient(to bottom, #1a3a5a 0%, #2d4d6f 50%, #1a4a3a 100%);
             border: 3px solid #00ff96;
             border-radius: 10px;
             display: block;
@@ -77,82 +77,7 @@
             cursor: pointer;
         }
 
-        .controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            padding: 15px;
-            background: linear-gradient(135deg, #3280ff 0%, #1e5fbf 100%);
-            color: white;
-            border: 2px solid #00ff96;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .button:hover:not(:disabled) {
-            background: linear-gradient(135deg, #4a9fff 0%, #2e7fff 100%);
-            box-shadow: 0 0 20px rgba(0, 255, 150, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .cost {
-            font-size: 0.8em;
-            color: #00ff96;
-            display: block;
-            margin-top: 5px;
-        }
-
-        .order-display {
-            background: rgba(50, 50, 100, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #ff6b6b;
-            color: #fff;
-            margin-bottom: 20px;
-        }
-
-        .order-title {
-            font-size: 1.2em;
-            color: #ff6b6b;
-            margin-bottom: 10px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 25px;
-            background: #222;
-            border-radius: 5px;
-            overflow: hidden;
-            border: 1px solid #00ff96;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00ff96 0%, #00cc7a 100%);
-            width: 0%;
-            transition: width 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: black;
-            font-weight: bold;
-            font-size: 0.8em;
-        }
-
-        .info {
+        .controls-info {
             background: rgba(50, 100, 50, 0.3);
             padding: 15px;
             border-radius: 10px;
@@ -160,6 +85,62 @@
             color: #ddd;
             font-size: 0.9em;
             line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .upgrade-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            background: rgba(50, 50, 100, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #ff6b6b;
+        }
+
+        .upgrade-button {
+            padding: 15px;
+            background: linear-gradient(135deg, #3280ff 0%, #1e5fbf 100%);
+            color: white;
+            border: 2px solid #00ff96;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upgrade-button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #4a9fff 0%, #2e7fff 100%);
+            box-shadow: 0 0 20px rgba(0, 255, 150, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .upgrade-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .upgrade-name {
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        .upgrade-cost {
+            font-size: 0.85em;
+            color: #00ff96;
+        }
+
+        .upgrade-effect {
+            font-size: 0.75em;
+            color: #aaa;
+            margin-top: 5px;
         }
 
         .game-over {
@@ -209,15 +190,33 @@
             background: #00cc7a;
             transform: scale(1.05);
         }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: #00ff96;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            pointer-events: none;
+            z-index: 999;
+            white-space: nowrap;
+            border: 2px solid #00ff96;
+            display: none;
+        }
+
+        .tooltip.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <h1 class="game-title">🎄 Christmas Toy Tycoon 🎄</h1>
+        <h1 class="game-title">🎄 Christmas Toy Tycoon - Roblox Edition 🎄</h1>
         
         <div class="game-stats">
             <div class="stat">
-                <div class="stat-value" id="moneyDisplay">$100</div>
+                <div class="stat-value" id="moneyDisplay">$1000</div>
                 <div class="stat-label">💰 Money</div>
             </div>
             <div class="stat">
@@ -225,73 +224,49 @@
                 <div class="stat-label">📊 Score</div>
             </div>
             <div class="stat">
-                <div class="stat-value" id="levelDisplay">1</div>
-                <div class="stat-label">📈 Level</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="workersDisplay">1</div>
-                <div class="stat-label">👷 Workers</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="speedDisplay">1.0x</div>
-                <div class="stat-label">⚡ Speed</div>
-            </div>
-            <div class="stat">
                 <div class="stat-value" id="daysDisplay">25</div>
                 <div class="stat-label">🎅 Days Left</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="toysPerSecDisplay">0</div>
+                <div class="stat-label">🎁 Per Second</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="productionMultiplier">1.0x</div>
+                <div class="stat-label">⚡ Multiplier</div>
             </div>
         </div>
 
         <canvas id="gameCanvas"></canvas>
 
-        <div class="order-display">
-            <div class="order-title" id="orderTitle">Order: Wooden Blocks</div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="orderProgress" style="width: 0%;">0 / 10</div>
-            </div>
+        <div class="controls-info">
+            <strong>🎮 How to Play:</strong><br>
+            • Use <strong>A/D</strong> or <strong>Arrow Keys</strong> to move your character left and right<br>
+            • Press <strong>Space</strong> or click buttons to purchase upgrades<br>
+            • Stand on upgrade buttons to activate them when you have enough money<br>
+            • Earn passive income from production multipliers<br>
+            • Race against the clock to reach your profit goal before Christmas!<br>
+            • The more upgrades you buy, the faster you earn money
         </div>
 
-        <div class="controls">
-            <button class="button" id="hireBtn" onclick="game.hireWorker()">
-                👷 Hire Worker
-                <span class="cost">$50</span>
-            </button>
-            <button class="button" id="speedBtn" onclick="game.speedUp()">
-                ⚡ Speed Up
-                <span class="cost">$30</span>
-            </button>
-            <button class="button" id="toyBtn" onclick="game.changeToyType()">
-                🎁 New Toy Type
-                <span class="cost">$100</span>
-            </button>
-            <button class="button" id="upgradeBtn" onclick="game.upgradeFactory()">
-                🏭 Upgrade Factory
-                <span class="cost">$200</span>
-            </button>
-        </div>
-
-        <div class="info">
-            <strong>💡 How to Play:</strong><br>
-            • Watch toys move along the conveyor belt from left to right<br>
-            • Hire workers to help produce toys faster<br>
-            • Complete orders to earn bonuses and level up<br>
-            • Upgrade your factory before Christmas arrives!<br>
-            • Each toy type has different value and production time
+        <div class="upgrade-list" id="upgradeButtonsList">
+            <!-- Upgrade buttons will be dynamically generated here -->
         </div>
     </div>
 
     <div class="game-over" id="gameOverScreen">
         <h2 id="gameOverTitle">Game Over!</h2>
         <p id="gameOverMessage"></p>
-        <p id="finalScore"></p>
+        <p id="finalStats"></p>
         <button onclick="location.reload()">Play Again</button>
     </div>
+
+    <div class="tooltip" id="tooltip"></div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Resize canvas to fit container
         function resizeCanvas() {
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
@@ -299,199 +274,223 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        const ToyTypes = {
-            WOODEN_BLOCK: {
-                name: "Wooden Block",
-                value: 5,
-                productionTime: 30,
-                color: "#b48c50"
-            },
-            DOLL: {
-                name: "Doll",
-                value: 15,
-                productionTime: 60,
-                color: "#ffb4c8"
-            },
-            TRAIN: {
-                name: "Train",
-                value: 25,
-                productionTime: 90,
-                color: "#ff6432"
-            },
-            ROBOT: {
-                name: "Robot",
-                value: 40,
-                productionTime: 120,
-                color: "#c8c8c8"
-            }
-        };
+        const Upgrades = [
+            { id: 'worker1', name: '👷 Worker', cost: 50, effect: '+$1/sec', income: 1, icon: '👷' },
+            { id: 'worker2', name: '👷👷 Team', cost: 150, effect: '+$5/sec', income: 5, icon: '👷' },
+            { id: 'factory', name: '🏭 Factory', cost: 300, effect: '+$10/sec', income: 10, icon: '🏭' },
+            { id: 'robot', name: '🤖 Robot Arm', cost: 600, effect: '+$20/sec', income: 20, icon: '🤖' },
+            { id: 'conveyor', name: '🔄 Conveyor', cost: 1000, effect: 'x2 Speed', multiplier: 2, icon: '🔄' },
+            { id: 'ai', name: '🧠 AI System', cost: 2000, effect: 'x2 Speed', multiplier: 2, icon: '🧠' },
+            { id: 'laser', name: '⚡ Laser Cutter', cost: 5000, effect: '+$50/sec', income: 50, icon: '⚡' },
+            { id: 'quantum', name: '✨ Quantum Chip', cost: 10000, effect: 'x3 Speed', multiplier: 3, icon: '✨' },
+        ];
 
-        class Toy {
-            constructor(type, x) {
-                this.type = type;
-                this.x = x;
-                this.y = canvas.height / 2;
-                this.progress = 0;
-                this.value = type.value;
-                this.size = 12;
-            }
-
-            update(speed) {
-                this.x += speed;
-                this.progress = Math.min(1, this.progress + 0.005);
-            }
-
-            draw(ctx) {
-                ctx.fillStyle = this.type.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-
-                if (this.progress < 1) {
-                    const barWidth = 30;
-                    const barHeight = 4;
-                    ctx.fillStyle = "#333";
-                    ctx.fillRect(this.x - barWidth / 2, this.y - 28, barWidth, barHeight);
-                    ctx.fillStyle = "#00ff96";
-                    ctx.fillRect(this.x - barWidth / 2, this.y - 28, barWidth * this.progress, barHeight);
-                }
-            }
-
-            isComplete() {
-                return this.progress >= 1;
-            }
-        }
-
-        class Worker {
+        class Player {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                this.width = 18;
-                this.height = 28;
-                this.workingOn = null;
+                this.width = 25;
+                this.height = 35;
+                this.velocityX = 0;
+                this.speed = 4;
+                this.onUpgrade = null;
+                this.purchaseAnimation = 0;
             }
 
-            update(toys) {
-                if (!this.workingOn || this.workingOn.progress >= 1) {
-                    const incompleteToys = toys.filter(t => !t.isComplete());
-                    if (incompleteToys.length > 0) {
-                        this.workingOn = incompleteToys.reduce((a, b) =>
-                            Math.abs(a.x - this.x) < Math.abs(b.x - this.x) ? a : b
-                        );
+            update(keys, upgrades) {
+                // Movement
+                if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
+                    this.velocityX = -this.speed;
+                } else if (keys['ArrowRight'] || keys['d'] || keys['D']) {
+                    this.velocityX = this.speed;
+                } else {
+                    this.velocityX = 0;
+                }
+
+                this.x += this.velocityX;
+                this.x = Math.max(0, Math.min(canvas.width - this.width, this.x));
+
+                // Check collision with upgrades
+                this.onUpgrade = null;
+                for (let upgrade of upgrades) {
+                    if (this.isCollidingWith(upgrade)) {
+                        this.onUpgrade = upgrade;
+                        break;
                     }
                 }
 
-                if (this.workingOn) {
-                    const targetX = this.workingOn.x;
-                    if (Math.abs(this.x - targetX) > 5) {
-                        this.x += (targetX - this.x) * 0.05;
-                    } else {
-                        this.workingOn.progress += 0.01;
-                    }
+                if (this.purchaseAnimation > 0) {
+                    this.purchaseAnimation -= 0.05;
                 }
+            }
+
+            isCollidingWith(upgrade) {
+                return (
+                    this.x < upgrade.x + upgrade.width &&
+                    this.x + this.width > upgrade.x &&
+                    this.y < upgrade.y + upgrade.height &&
+                    this.y + this.height > upgrade.y
+                );
             }
 
             draw(ctx) {
-                ctx.fillStyle = "#64c844";
-                ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
-                ctx.fillStyle = "#ddb48c";
+                const animOffset = this.purchaseAnimation * 15;
+
+                // Body
+                ctx.fillStyle = '#ff5500';
+                ctx.fillRect(this.x, this.y - animOffset, this.width, this.height);
+
+                // Head
+                ctx.fillStyle = '#ffb380';
                 ctx.beginPath();
-                ctx.arc(this.x, this.y - 20, 8, 0, Math.PI * 2);
+                ctx.arc(this.x + this.width / 2, this.y - 10 - animOffset, 8, 0, Math.PI * 2);
                 ctx.fill();
+
+                // Eyes
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(this.x + this.width / 2 - 3, this.y - 12 - animOffset, 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(this.x + this.width / 2 + 3, this.y - 12 - animOffset, 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Legs
+                ctx.fillStyle = '#1a1a1a';
+                ctx.fillRect(this.x + 5, this.y + this.height - animOffset, 6, 10);
+                ctx.fillRect(this.x + 14, this.y + this.height - animOffset, 6, 10);
+            }
+        }
+
+        class Upgrade {
+            constructor(upgradeData, index) {
+                this.id = upgradeData.id;
+                this.name = upgradeData.name;
+                this.cost = upgradeData.cost;
+                this.effect = upgradeData.effect;
+                this.income = upgradeData.income || 0;
+                this.multiplier = upgradeData.multiplier || 1;
+                this.icon = upgradeData.icon;
+                this.purchased = 0;
+                this.baseWidth = 110;
+                this.baseHeight = 80;
+                this.width = this.baseWidth;
+                this.height = this.baseHeight;
+                
+                const spacing = 130;
+                this.x = 50 + (index % 4) * spacing;
+                this.y = 100 + Math.floor(index / 4) * 100;
+            }
+
+            update(playerX) {
+                // Hover effect when player is near
+                const distance = Math.hypot(playerX - (this.x + this.width / 2), canvas.height - this.y);
+                if (distance < 100) {
+                    this.width = this.baseWidth * 1.1;
+                    this.height = this.baseHeight * 1.1;
+                } else {
+                    this.width = this.baseWidth;
+                    this.height = this.baseHeight;
+                }
+            }
+
+            draw(ctx, canAfford) {
+                const gradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.height);
+                
+                if (canAfford) {
+                    gradient.addColorStop(0, '#3280ff');
+                    gradient.addColorStop(1, '#1e5fbf');
+                } else {
+                    gradient.addColorStop(0, '#666');
+                    gradient.addColorStop(1, '#444');
+                }
+
+                ctx.fillStyle = gradient;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+
+                ctx.strokeStyle = canAfford ? '#00ff96' : '#666';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(this.x, this.y, this.width, this.height);
+
+                // Icon
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(this.icon, this.x + this.width / 2, this.y + 20);
+
+                // Cost
+                ctx.font = 'bold 12px Arial';
+                ctx.fillStyle = canAfford ? '#00ff96' : '#888';
+                ctx.fillText(`$${this.cost}`, this.x + this.width / 2, this.y + 45);
+
+                // Purchased count
+                if (this.purchased > 0) {
+                    ctx.font = 'bold 10px Arial';
+                    ctx.fillStyle = '#ff6b6b';
+                    ctx.fillText(`x${this.purchased}`, this.x + this.width / 2, this.y + 65);
+                }
             }
         }
 
         const game = {
-            money: 100,
+            money: 1000,
             score: 0,
-            level: 1,
             daysUntilChristmas: 25,
-            toys: [],
-            workers: [],
-            conveyorSpeed: 1.0,
-            currentOrder: ToyTypes.WOODEN_BLOCK,
-            ordersFulfilled: 0,
-            orderQuantity: 10,
-            orderProgress: 0,
+            passiveIncome: 0,
+            productionMultiplier: 1,
+            toysPerSecond: 0,
+            upgrades: [],
+            player: null,
             gameRunning: true,
+            profitGoal: 50000,
 
             init() {
-                this.hireWorker();
+                this.player = new Player(canvas.width / 2, canvas.height - 100);
+                
+                Upgrades.forEach((upgradeData, index) => {
+                    this.upgrades.push(new Upgrade(upgradeData, index));
+                });
+
                 this.gameLoop();
                 this.updateUI();
             },
 
-            hireWorker() {
-                if (this.money < 50) return;
-                this.money -= 50;
-                const y = canvas.height / 2 + (Math.random() - 0.5) * 80;
-                this.workers.push(new Worker(Math.random() * 200 + 100, y));
-                this.updateUI();
-            },
+            purchaseUpgrade(upgrade) {
+                if (this.money >= upgrade.cost && this.gameRunning) {
+                    this.money -= upgrade.cost;
+                    upgrade.purchased += 1;
+                    upgrade.cost = Math.ceil(upgrade.cost * 1.15);
+                    
+                    this.passiveIncome += upgrade.income;
+                    this.productionMultiplier *= upgrade.multiplier;
+                    this.toysPerSecond = this.passiveIncome * this.productionMultiplier;
+                    
+                    this.player.purchaseAnimation = 1;
+                    this.updateUI();
 
-            speedUp() {
-                if (this.money < 30) return;
-                this.money -= 30;
-                this.conveyorSpeed *= 1.2;
-                this.updateUI();
-            },
-
-            changeToyType() {
-                if (this.money < 100) return;
-                this.money -= 100;
-                const types = Object.values(ToyTypes);
-                this.currentOrder = types[Math.floor(Math.random() * types.length)];
-                this.orderProgress = 0;
-                this.updateUI();
-            },
-
-            upgradeFactory() {
-                if (this.money < 200) return;
-                this.money -= 200;
-                this.level += 1;
-                this.conveyorSpeed += 0.8;
-                this.updateUI();
+                    // Check if player reached goal
+                    if (this.score >= this.profitGoal) {
+                        this.endGame(true);
+                    }
+                }
             },
 
             update() {
                 if (!this.gameRunning) return;
 
-                // Spawn new toys
-                if (Math.random() < 0.02 && this.toys.length < 30) {
-                    this.toys.push(new Toy(this.currentOrder, -20));
-                }
+                const keys = game.keys || {};
+                this.player.update(keys, this.upgrades);
 
-                // Update toys
-                this.toys = this.toys.filter(toy => toy.x <= canvas.width + 50);
-                this.toys.forEach(toy => toy.update(this.conveyorSpeed));
+                // Update upgrades
+                this.upgrades.forEach(upgrade => upgrade.update(this.player.x));
 
-                // Check completed toys
-                this.toys.forEach(toy => {
-                    if (toy.isComplete() && toy.x < canvas.width - 50) {
-                        this.money += toy.value;
-                        this.score += toy.value;
-                        this.orderProgress += 1;
-                    }
-                });
+                // Passive income
+                this.money += this.toysPerSecond / 60;
+                this.score += this.toysPerSecond / 60;
 
-                this.toys = this.toys.filter(toy => !(toy.isComplete() && toy.x < canvas.width - 50));
+                // Decrease days
+                this.daysUntilChristmas = Math.max(0, 25 - Math.floor(this.score / (this.profitGoal / 25)));
 
-                // Update workers
-                this.workers.forEach(worker => worker.update(this.toys));
-
-                // Check order completion
-                if (this.orderProgress >= this.orderQuantity) {
-                    this.ordersFulfilled += 1;
-                    this.money += 50;
-                    const types = Object.values(ToyTypes);
-                    this.currentOrder = types[Math.floor(Math.random() * types.length)];
-                    this.orderProgress = 0;
-                    this.orderQuantity = Math.max(10, 10 + this.ordersFulfilled);
-                }
-
-                this.daysUntilChristmas = Math.max(0, 25 - Math.floor(this.ordersFulfilled / 5));
-
-                if (this.daysUntilChristmas === 0 && this.orderProgress < this.orderQuantity) {
+                if (this.daysUntilChristmas === 0 && this.score < this.profitGoal) {
                     this.endGame(false);
                 }
 
@@ -499,50 +498,40 @@
             },
 
             draw() {
-                ctx.fillStyle = "rgba(26, 42, 74, 0.8)";
+                // Background
+                ctx.fillStyle = 'rgba(26, 58, 90, 0.8)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Draw conveyor belt
-                ctx.fillStyle = "#646478";
-                ctx.fillRect(0, canvas.height / 2 - 30, canvas.width, 60);
+                // Ground
+                ctx.fillStyle = '#2d5a3d';
+                ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
 
-                ctx.strokeStyle = "#464650";
-                ctx.lineWidth = 1;
-                for (let i = 0; i < canvas.width; i += 40) {
-                    ctx.beginPath();
-                    ctx.moveTo(i, canvas.height / 2 - 30);
-                    ctx.lineTo(i, canvas.height / 2 + 30);
-                    ctx.stroke();
+                ctx.strokeStyle = '#00ff96';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(0, canvas.height - 50, canvas.width, 50);
+
+                // Draw upgrades
+                const canAfford = (upgrade) => this.money >= upgrade.cost;
+                this.upgrades.forEach(upgrade => upgrade.draw(ctx, canAfford(upgrade)));
+
+                // Draw player
+                this.player.draw(ctx);
+
+                // Draw hint if standing on upgrade
+                if (this.player.onUpgrade && this.money >= this.player.onUpgrade.cost) {
+                    ctx.font = 'bold 14px Arial';
+                    ctx.fillStyle = '#00ff96';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Press SPACE to buy!', this.player.x + this.player.width / 2, this.player.y - 50);
                 }
-
-                // Draw toys
-                this.toys.forEach(toy => toy.draw(ctx));
-
-                // Draw workers
-                this.workers.forEach(worker => worker.draw(ctx));
             },
 
             updateUI() {
-                document.getElementById('moneyDisplay').textContent = `$${this.money}`;
-                document.getElementById('scoreDisplay').textContent = this.score;
-                document.getElementById('levelDisplay').textContent = this.level;
-                document.getElementById('workersDisplay').textContent = this.workers.length;
-                document.getElementById('speedDisplay').textContent = this.conveyorSpeed.toFixed(1) + 'x';
+                document.getElementById('moneyDisplay').textContent = `$${Math.floor(this.money)}`;
+                document.getElementById('scoreDisplay').textContent = `$${Math.floor(this.score)} / $${this.profitGoal}`;
                 document.getElementById('daysDisplay').textContent = this.daysUntilChristmas;
-
-                document.getElementById('orderTitle').textContent = 
-                    `Order: ${this.orderQuantity - this.orderProgress} ${this.currentOrder.name}s left`;
-                
-                const percentage = (this.orderProgress / this.orderQuantity) * 100;
-                const progressBar = document.getElementById('orderProgress');
-                progressBar.style.width = percentage + '%';
-                progressBar.textContent = `${this.orderProgress} / ${this.orderQuantity}`;
-
-                // Update button states
-                document.getElementById('hireBtn').disabled = this.money < 50;
-                document.getElementById('speedBtn').disabled = this.money < 30;
-                document.getElementById('toyBtn').disabled = this.money < 100;
-                document.getElementById('upgradeBtn').disabled = this.money < 200;
+                document.getElementById('toysPerSecDisplay').textContent = this.toysPerSecond.toFixed(2);
+                document.getElementById('productionMultiplier').textContent = this.productionMultiplier.toFixed(1) + 'x';
             },
 
             endGame(win) {
@@ -550,16 +539,16 @@
                 const gameOverScreen = document.getElementById('gameOverScreen');
                 const title = document.getElementById('gameOverTitle');
                 const message = document.getElementById('gameOverMessage');
-                const finalScore = document.getElementById('finalScore');
+                const stats = document.getElementById('finalStats');
 
                 if (win) {
                     title.textContent = '🎉 You Won! 🎉';
-                    message.textContent = 'Congratulations! You delivered all toys before Christmas!';
+                    message.textContent = 'Congratulations! You became a Toy Tycoon before Christmas!';
                 } else {
                     title.textContent = '❌ Christmas Passed ❌';
-                    message.textContent = 'Oh no! You ran out of time before Christmas arrived!';
+                    message.textContent = 'Oh no! You ran out of time before reaching your profit goal!';
                 }
-                finalScore.textContent = `Final Score: ${this.score} | Level: ${this.level}`;
+                stats.textContent = `Final Balance: $${Math.floor(this.score)} | Multiplier: ${this.productionMultiplier.toFixed(1)}x`;
                 gameOverScreen.classList.add('show');
             },
 
@@ -571,6 +560,38 @@
                 }
             }
         };
+
+        // Input handling
+        game.keys = {};
+        window.addEventListener('keydown', (e) => {
+            game.keys[e.key] = true;
+            
+            if (e.key === ' ' && game.player.onUpgrade && game.gameRunning) {
+                e.preventDefault();
+                game.purchaseUpgrade(game.player.onUpgrade);
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            game.keys[e.key] = false;
+        });
+
+        // Mouse click to purchase
+        canvas.addEventListener('click', (e) => {
+            if (!game.gameRunning) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            for (let upgrade of game.upgrades) {
+                if (mouseX > upgrade.x && mouseX < upgrade.x + upgrade.width &&
+                    mouseY > upgrade.y && mouseY < upgrade.y + upgrade.height) {
+                    game.purchaseUpgrade(upgrade);
+                    break;
+                }
+            }
+        });
 
         game.init();
     </script>
